@@ -1,1 +1,1 @@
-# AoG-bot
+# Association of Gamers Discord Bot
