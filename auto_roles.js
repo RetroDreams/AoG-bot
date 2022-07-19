@@ -23,11 +23,22 @@ client.on('presenceUpdate', (oldMember, newMember) => {
     const oldLivestream = oldMember.activities.find(activity => activity.type === 1) // activity type 1 is 'streaming a game'
     const newLivestream = newMember.activities.find(activity => activity.type === 1)
 
-    // ignore these types of events
-    if (newMember.user.bot||
-    newMember.clientStatus === 'mobile' ||
-    oldMember.status !== newMember.status) return
-    
+    // ignore bots and mobile users
+    if (newMember.user.bot || newMember.clientStatus === 'mobile') return
+
+    // went offline
+    if (newMember.status === 'offline') {
+      newMember.member.roles.remove(playingRole)
+        .then(() => logger.debug(`offline removed: ${newMember.user.tag}`))
+        .catch(logger.error)
+      newMember.member.roles.remove(streamingRole)
+        .then(() => logger.debug(`offline removed: ${newMember.user.tag}`))
+        .catch(logger.error)
+    }
+
+    // ignore change in status (ex. going idle)
+    if (oldMember.status !== newMember.status) return
+
     // playing game
     if (oldGame === undefined && newGame !== undefined) { // started playing
       // ignore these games
