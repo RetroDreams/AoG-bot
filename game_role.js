@@ -26,7 +26,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 
     if (oldGame === undefined && newGame !== undefined) { // started playing
       // ignore these games
-      if (['Wallpaper Engine'].includes(newGame.name)) {
+      if (['Wallpaper Engine', 'About Me'].includes(newGame.name)) {
         logger.debug(`ignore list: ${newMember.user.tag} - ${newGame.name}`)
         return
       }
