@@ -1,10 +1,31 @@
 require('dotenv').config()
 const { Client, GatewayIntentBits } = require('discord.js')
-const logger = require('winston')
+const { createLogger, format, transports } = require('winston');
 
-logger.remove(logger.transports.Console)
-logger.add(new logger.transports.Console, { colorize: true })
-logger.level = 'debug'
+const myFormat = format.printf(({ level, message, label, timestamp }) => {
+  return `${timestamp} [${label}] ${level}: ${message}`;
+});
+
+const logger = createLogger({
+    transports: [
+        new transports.File({
+            maxsize: 5120000,
+            maxFiles: 20,
+            filename: `logs/logs.log`,
+            timestamp: true,
+            json: true,
+        }),
+        new transports.Console({
+            level: "debug",
+            timestamp: true,
+            format: format.combine(
+                format.timestamp(),
+                format.colorize(), 
+                myFormat,
+            )
+        })
+    ]
+});
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildPresences] })
 client.login(process.env.BOT_TOKEN)
