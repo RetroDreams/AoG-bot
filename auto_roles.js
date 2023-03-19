@@ -8,13 +8,6 @@ const myFormat = format.printf(({ level, message, timestamp }) => {
 
 const logger = createLogger({
     transports: [
-        new transports.File({
-            maxsize: 5120000,
-            maxFiles: 20,
-            filename: `logs/logs.log`,
-            timestamp: true,
-            json: true,
-        }),
         new transports.Console({
             level: "debug",
             timestamp: true,
