@@ -2,8 +2,8 @@ require('dotenv').config()
 const { Client, GatewayIntentBits } = require('discord.js')
 const { createLogger, format, transports } = require('winston');
 
-const myFormat = format.printf(({ level, message, label, timestamp }) => {
-  return `${timestamp} [${label}] ${level}: ${message}`;
+const myFormat = format.printf(({ level, message, timestamp }) => {
+  return `${timestamp} [${level}]: ${message}`;
 });
 
 const logger = createLogger({
